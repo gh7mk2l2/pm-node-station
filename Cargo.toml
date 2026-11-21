@@ -1,0 +1,49 @@
+[package]
+name = "pm-node-station"
+version = "1.0.0"
+edition = "2021"
+
+[[bin]]
+name = "pm-node-station"
+path = "src/main.rs"
+
+[[bin]]
+name = "pm-node-relay"
+path = "src/bin/pm-node-relay.rs"
+
+[dependencies]
+axum = { version = "0.8", features = ["macros"] }
+tokio = { version = "1", features = ["full"] }
+tower = "0.5"
+tower-http = { version = "0.6", features = ["fs", "trace", "timeout"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "postgres", "chrono", "uuid", "json", "migrate", "macros"] }
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+rand = "0.8"
+sha2 = "0.10"
+base64 = "0.22"
+reqwest = { version = "0.12", default-features = false, features = ["json", "native-tls"] }
+# rustls 仍由 socks_test.rs 直接使用（代理池测速的 TLS），不可删；reqwest 本身已改走 native-tls (OpenSSL)
+tokio-rustls = "0.26"
+rustls = { version = "0.23", features = ["ring"] }
+# tier-2 relay 终结 relay.pmcat.top 的 TLS（灰云后边缘不再解 TLS）：读 PEM 证书/私钥
+rustls-pemfile = "2"
+webpki-roots = "1"
+thiserror = "2"
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+dotenvy = "0.15"
+futures-util = "0.3"
+bytes = "1"
+url = "2"
+http = "1"
+
+[profile.release]
+opt-level = 2
+lto = "thin"
+codegen-units = 4
+strip = true

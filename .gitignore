@@ -1,0 +1,8 @@
+target/
+.env
+*.log
+*.bak-*
+*.bak
+*.dump
+/bin/
+.DS_Store
